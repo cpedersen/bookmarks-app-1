@@ -79,4 +79,3 @@ BookmarkItem.defaultProps = {
 }
 
 
-//export default function BookmarkItem(props) {
