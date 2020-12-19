@@ -24,13 +24,11 @@ function deleteBookmarkRequest(bookmarkId, callback) {
       //string was reached before parsing the content.
       //Solution is to collect all the data values together and concatenate them
       //so that they are all sent at once.
-      
-      //return res.json()
       return JSON.parse(JSON.stringify(res))
     })
     .then(data => {
-      // call the callback when the request is successful
-      // this is where the App component can remove it from state
+      // Call the callback when the request is successful.
+      // This is where the App component can remove it from state.
       callback(bookmarkId)
     })
     .catch(error => {

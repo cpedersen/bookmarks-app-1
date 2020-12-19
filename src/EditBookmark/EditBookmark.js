@@ -90,7 +90,7 @@ class EditBookmark extends Component {
 
     handleChangeRating = e => {
         //Capture text entered by the user
-        this.setState({ rating: e.target.value })
+        this.setState({ rating: Number(e.target.value) })
     };
 
     handleClickCancel = () => {
