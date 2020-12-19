@@ -84,12 +84,18 @@ class App extends Component {
     })
       .then(res => {
         if (!res.ok) {
-          throw new Error(res.status)
+          console.error("Can't execute componentDidMount in app.js")
+          return res.json().then(error => Promise.reject(error))
+          //throw new Error(res.status)
         }
         return res.json()
       })
       .then(this.setBookmarks)
-      .catch(error => this.setState({ error }))
+      /*.catch(error => this.setState({ error }))*/
+      .catch(error => {
+        console.error(error)
+        this.setState({ error })
+      })
   }
 
   render() {
@@ -101,9 +107,9 @@ class App extends Component {
       updateBookmark: this.updateBookmark
     }
 
+    /*<Rating value={2}/> */
     return (
       <main className='App'>
-        <Rating value={2}/>
         <h1>Bookmarks!</h1>
         <BookmarksContext.Provider value={contextValue}>
           <Nav />
@@ -113,7 +119,7 @@ class App extends Component {
               component={AddBookmark}
             />
             <Route
-              path='/edit-bookmark/:bookmarkId'
+              path='/edit/:bookmarkId'
               component={EditBookmark}
             />
             <Route

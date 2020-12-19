@@ -6,9 +6,21 @@ import PropTypes from 'prop-types';
 
 class BookmarkList extends Component {
   static contextType = BookmarksContext;
+
+  propTypes = {
+    bookmarks: PropTypes.arrayOf(PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+      rating: PropTypes.number,
+      description: PropTypes.string
+    }))
+  };
+
   static defaultProps = {
     bookmarks: []
   };
+
+  static contextType = BookmarksContext;
 
   render() {
     //const { bookmarks } = this.props
@@ -33,12 +45,4 @@ class BookmarkList extends Component {
   bookmarks: PropTypes.array
 };*/
 
-BookmarkList.propTypes = {
-  bookmarks: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    rating: PropTypes.number,
-    description: PropTypes.string
-  }))
-};
 export default BookmarkList;

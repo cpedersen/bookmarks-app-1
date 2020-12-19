@@ -1,26 +1,39 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Rating from '../Rating/Rating';
 import config from '../config';
 import BookmarksContext from '../BookmarksContext';
 import './BookmarkItem.css';
 
-/*function deleteBookmarkRequest(bookmarkId, cb) {
-
-}*/
+BookmarkItem.propTypes = {
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]).isRequired,
+  title: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  desciption: PropTypes.string,
+  rating: PropTypes.number.isRequired,
+  onClickDelete: PropTypes.func,
+}
 
 function deleteBookmarkRequest(bookmarkId, callback) {
   fetch(config.API_ENDPOINT + `/${bookmarkId}`, {
     method: 'DELETE',
     headers: {
+      'content-type': 'application/json',
       'authorization': `bearer ${config.API_KEY}`
     }
   })
     .then(res => {
       if (!res.ok) {
         // get the error message from the response,
+        console.error("Can't execute fetch in BookmarkItem.js")
         return res.json().then(error => {
-          // then throw it
-          throw error
+          //Return error
+          return res.json().then(error => Promise.reject(error))
+          //throw error
         })
       }
       return res.json()
@@ -56,6 +69,10 @@ export default function BookmarkItem(props) {
           {props.description}
         </p>
         <div className='BookmarkItem__buttons'>
+          <Link to={`/edit/${props.id}`}>
+            Edit
+          </Link>
+          {' '}
           <button
             className='BookmarkItem__description'
             onClick={() => {
