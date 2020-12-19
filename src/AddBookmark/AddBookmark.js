@@ -1,5 +1,6 @@
 import React, { Component } from  'react';
 //import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import BookmarksContext from '../BookmarksContext';
 import config from '../config'
 import './AddBookmark.css';
@@ -12,6 +13,12 @@ class AddBookmark extends Component {
   /*static defaultProps = {
     onAddBookmark: () => {}
   };*/
+  /*static propTypes = {
+    history: PropTypes.shape({
+      push: PropTypes.func,
+    }).isRequired,
+  };*/
+
   static contextType = BookmarksContext;
 
   state = {
@@ -26,7 +33,7 @@ class AddBookmark extends Component {
       title: title.value,
       url: url.value,
       description: description.value,
-      rating: rating.value,
+      rating: Number(rating.value),
     }
     this.setState({ error: null })
     fetch(config.API_ENDPOINT, {
@@ -39,11 +46,10 @@ class AddBookmark extends Component {
     })
       .then(res => {
         if (!res.ok) {
-          // get the error message from the response,
-          return res.json().then(error => {
+          // get the error message from the response
             // then throw it
-            throw error
-          })
+            //throw error
+          return res.json().then(error => Promise.reject(error))
         }
         return res.json()
       })
@@ -56,7 +62,11 @@ class AddBookmark extends Component {
         this.props.history.push('/')
         //this.props.onAddBookmark(data)
       })
+      /*.catch(error => 
+        this.setState({ error })
+      )*/
       .catch(error => {
+        console.error(error)
         this.setState({ error })
       })
   }
@@ -146,6 +156,12 @@ class AddBookmark extends Component {
     );
   }
 }
+
+AddBookmark.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
 
 //export default withRouter(AddBookmark);
 export default AddBookmark;

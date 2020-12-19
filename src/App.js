@@ -6,7 +6,7 @@ import BookmarkList from './BookmarkList/BookmarkList';
 import BookmarksContext from './BookmarksContext';
 import Nav from './Nav/Nav';
 import config from './config';
-import Rating from './Rating/Rating';
+//import Rating from './Rating/Rating';
 import './App.css';
 
 //const bookmarks = [
@@ -85,7 +85,8 @@ class App extends Component {
       .then(res => {
         if (!res.ok) {
           console.error("Can't execute componentDidMount in app.js")
-          return res.json().then(error => Promise.reject(error))
+          return res.json({error: "Can't execute componentDidMount in app.js"})
+            //.then(error => Promise.reject(error))
           //throw new Error(res.status)
         }
         return res.json()

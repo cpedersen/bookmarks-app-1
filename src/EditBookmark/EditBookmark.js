@@ -7,18 +7,19 @@ import './EditBookmark.css';
 
 const Required = () => (
     <span className='EditBookmark__required'>*</span>
-  )
+)
 
 class EditBookmark extends Component {
     //Check the object connect using shape (deep validation)
-    static propTypes = {
+    //These are system-level properties:
+    /*static propTypes = {
         match: PropTypes.shape({
           params: PropTypes.object,
         }),
         history: PropTypes.shape({
           push: PropTypes.func,
         }).isRequired,
-    };
+    };*/
 
     //Bookmarks info set to contextType
     static contextType = BookmarksContext;
@@ -34,7 +35,6 @@ class EditBookmark extends Component {
     };
 
     componentDidMount() {
-        console.log("Made it inside componentDidMount")
         //fetch
             //then
             //then responseData
@@ -44,16 +44,18 @@ class EditBookmark extends Component {
         fetch(config.API_ENDPOINT + `/${bookmarkId}`, {
             method: 'GET',
             headers: {
-              'authorization': `Bearer ${config.API_KEY}`
+              'content-type': 'application/json',
+              'Authorization': `Bearer ${config.API_KEY}`
             }
         })
             .then(res => {
-                if (!res.ok)
-                    //Return fail
-                    console.error("Can't execute fetch in EditBookmark.js --> componentDidMount")
-                    return res.json().then(error => Promise.reject(error))
-                //Else return success
+                if (!res.ok) {
+                  //Return fail
+                  return res.json().then(error => Promise.reject(error))
+                }
+                //Return success
                 return res.json()
+                //return JSON.parse(JSON.stringify(res))
             })
             .then(responseData => {
                 //Set the info in state
@@ -98,6 +100,7 @@ class EditBookmark extends Component {
 
     handleSubmit = e => {
         console.log("Made it inside handleSubmit")
+        //Prevents the page from reloading (taking its default action)
         e.preventDefault()
         //fetch
             //then
@@ -229,5 +232,14 @@ class EditBookmark extends Component {
         );
     }
 }
+
+EditBookmark.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.object,
+  }),
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
 
 export default EditBookmark;

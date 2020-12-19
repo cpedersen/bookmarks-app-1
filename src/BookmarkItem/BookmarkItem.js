@@ -6,17 +6,6 @@ import config from '../config';
 import BookmarksContext from '../BookmarksContext';
 import './BookmarkItem.css';
 
-BookmarkItem.propTypes = {
-  id: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]).isRequired,
-  title: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  desciption: PropTypes.string,
-  rating: PropTypes.number.isRequired,
-  onClickDelete: PropTypes.func,
-}
 
 function deleteBookmarkRequest(bookmarkId, callback) {
   fetch(config.API_ENDPOINT + `/${bookmarkId}`, {
@@ -28,15 +17,16 @@ function deleteBookmarkRequest(bookmarkId, callback) {
   })
     .then(res => {
       if (!res.ok) {
-        // get the error message from the response,
-        console.error("Can't execute fetch in BookmarkItem.js")
-        return res.json().then(error => {
-          //Return error
-          return res.json().then(error => Promise.reject(error))
-          //throw error
-        })
+        return res.json().then(error => Promise.reject(error))
       }
-      return res.json()
+      //FIXED - this is where error was being thrown when deleting a bookmark.
+      //Happens when trying to convert a string into a JSON object. The end of the
+      //string was reached before parsing the content.
+      //Solution is to collect all the data values together and concatenate them
+      //so that they are all sent at once.
+      
+      //return res.json()
+      return JSON.parse(JSON.stringify(res))
     })
     .then(data => {
       // call the callback when the request is successful
@@ -95,4 +85,14 @@ BookmarkItem.defaultProps = {
   onClickDelete: () => {},
 }
 
-
+BookmarkItem.propTypes = {
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]).isRequired,
+  title: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  desciption: PropTypes.string,
+  rating: PropTypes.number.isRequired,
+  onClickDelete: PropTypes.func,
+}
