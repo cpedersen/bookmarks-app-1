@@ -99,7 +99,6 @@ class EditBookmark extends Component {
     };
 
     handleSubmit = e => {
-        console.log("Made it inside handleSubmit")
         //Prevents the page from reloading (taking its default action)
         e.preventDefault()
         //fetch
